@@ -1,4 +1,4 @@
-package com.mini.inventory.Controller;
+package com.mini.inventory.controller;
 
 import com.mini.inventory.dto.CreateProductRequest;
 import com.mini.inventory.dto.ProductResponse;

@@ -55,10 +55,15 @@ public class ProductServiceImpl
 
         Product saved = repository.save(product);
 
-        log.info("Product created with id={}",
-                saved.getId());
+        log.info(
+                "Product created. sku={}, id={}, category={}",
+                product.getSku(),
+                product.getId(),
+                product.getCategory()
+        );
 
-       /* return ProductResponse.builder()
+       /* Using Builder
+         return ProductResponse.builder()
                 .id(saved.getId())
                 .sku(saved.getSku())
                 .name(saved.getName())
