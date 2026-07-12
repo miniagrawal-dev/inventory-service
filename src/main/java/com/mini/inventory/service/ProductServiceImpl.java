@@ -4,9 +4,10 @@ import com.mini.inventory.dto.CreateProductRequest;
 import com.mini.inventory.dto.ProductResponse;
 import com.mini.inventory.entity.Product;
 import com.mini.inventory.exception.DuplicateSkuException;
+import com.mini.inventory.exception.ProductNotFoundException;
 import com.mini.inventory.mapper.ProductMapper;
 import com.mini.inventory.repository.ProductRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,5 +78,15 @@ public class ProductServiceImpl
 
         return mapper.toResponse(saved);
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse getProduct(Long id) {
+
+        Product product = repository.findById(id)
+                .orElseThrow(()->
+                        new ProductNotFoundException(id));
+        return mapper.toResponse(product);
     }
 }
