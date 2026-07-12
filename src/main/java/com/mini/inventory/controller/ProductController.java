@@ -1,6 +1,7 @@
 package com.mini.inventory.controller;
 
 import com.mini.inventory.dto.CreateProductRequest;
+import com.mini.inventory.dto.PageResponse;
 import com.mini.inventory.dto.ProductResponse;
 import com.mini.inventory.service.ProductService;
 import jakarta.validation.Valid;
@@ -37,6 +38,17 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProduct(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResponse<ProductResponse>> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        return ResponseEntity.ok(
+                productService.getProducts(page, size, sortBy, direction));
     }
 
 }

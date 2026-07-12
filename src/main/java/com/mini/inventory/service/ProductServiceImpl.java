@@ -1,6 +1,7 @@
 package com.mini.inventory.service;
 
 import com.mini.inventory.dto.CreateProductRequest;
+import com.mini.inventory.dto.PageResponse;
 import com.mini.inventory.dto.ProductResponse;
 import com.mini.inventory.entity.Product;
 import com.mini.inventory.exception.DuplicateSkuException;
@@ -12,6 +13,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @Service
 @RequiredArgsConstructor
@@ -88,5 +94,37 @@ public class ProductServiceImpl
                 .orElseThrow(()->
                         new ProductNotFoundException(id));
         return mapper.toResponse(product);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<ProductResponse> getProducts(
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Product> productPage = repository.findAll(pageable);
+
+        return PageResponse.<ProductResponse>builder()
+                .content(
+                        productPage.getContent()
+                                .stream()
+                                .map(mapper::toResponse)
+                                .toList()
+                )
+                .page(productPage.getNumber())
+                .size(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
+                .first(productPage.isFirst())
+                .last(productPage.isLast())
+                .build();
     }
 }
