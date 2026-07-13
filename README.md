@@ -26,6 +26,16 @@ POST /api/v1/products
 "availableQuantity":100
 }
 
+PUT /api/v1/products/1
+{
+"name":"iPhone 16 Pro",
+"description":"256GB Black",
+"category":"Mobile",
+"price":99999,
+"availableQuantity":50
+}
+
+
 Verify database
 docker exec -it postgres-db psql -U postgres -d inventory_db
 

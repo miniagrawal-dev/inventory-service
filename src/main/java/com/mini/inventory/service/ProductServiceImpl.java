@@ -3,6 +3,7 @@ package com.mini.inventory.service;
 import com.mini.inventory.dto.CreateProductRequest;
 import com.mini.inventory.dto.PageResponse;
 import com.mini.inventory.dto.ProductResponse;
+import com.mini.inventory.dto.UpdateProductRequest;
 import com.mini.inventory.entity.Product;
 import com.mini.inventory.exception.DuplicateSkuException;
 import com.mini.inventory.exception.ProductNotFoundException;
@@ -126,5 +127,19 @@ public class ProductServiceImpl
                 .first(productPage.isFirst())
                 .last(productPage.isLast())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse updateProduct(Long id, UpdateProductRequest request) {
+
+        Product product = repository.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException(id));
+
+        mapper.updateProduct(request, product);
+        log.info("Updated product {}", id);
+
+        return mapper.toResponse(product);
     }
 }

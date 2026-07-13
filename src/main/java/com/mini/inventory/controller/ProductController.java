@@ -3,6 +3,7 @@ package com.mini.inventory.controller;
 import com.mini.inventory.dto.CreateProductRequest;
 import com.mini.inventory.dto.PageResponse;
 import com.mini.inventory.dto.ProductResponse;
+import com.mini.inventory.dto.UpdateProductRequest;
 import com.mini.inventory.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,14 @@ public class ProductController {
 
         return ResponseEntity.ok(
                 productService.getProducts(page, size, sortBy, direction));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponse> updateProduct(
+            @PathVariable Long id, @Valid @RequestBody UpdateProductRequest request){
+
+        return ResponseEntity.ok(
+                productService.updateProduct(id, request));
     }
 
 }
