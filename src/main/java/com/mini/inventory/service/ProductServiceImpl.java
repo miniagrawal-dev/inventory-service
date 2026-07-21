@@ -176,4 +176,15 @@ public class ProductServiceImpl
                 .last(productPage.isLast())
                 .build();
     }
+
+    @Override
+    @Transactional
+    public void deleteProduct(Long id) {
+
+        Product product = repository.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException(id));
+
+        repository.delete(product);
+    }
 }

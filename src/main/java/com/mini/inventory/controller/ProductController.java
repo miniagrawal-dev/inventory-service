@@ -72,4 +72,11 @@ public class ProductController {
                 productService.searchProducts(keyword, page, size, sortBy, direction));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }

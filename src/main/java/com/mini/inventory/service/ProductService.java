@@ -19,4 +19,6 @@ public interface ProductService {
     PageResponse<ProductResponse> searchProducts(
             String keyword, int page, int size, String sortBy, String direction);
 
+    void deleteProduct(Long id);
+
 }
