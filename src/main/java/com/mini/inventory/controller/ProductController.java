@@ -6,14 +6,18 @@ import com.mini.inventory.dto.ProductResponse;
 import com.mini.inventory.dto.UpdateProductRequest;
 import com.mini.inventory.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@Validated
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
@@ -43,8 +47,8 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<PageResponse<ProductResponse>> getProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction) {
 

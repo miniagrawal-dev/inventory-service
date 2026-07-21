@@ -1,5 +1,6 @@
 package com.mini.inventory.service;
 
+import com.mini.inventory.constants.ProductSortFields;
 import com.mini.inventory.dto.CreateProductRequest;
 import com.mini.inventory.dto.PageResponse;
 import com.mini.inventory.dto.ProductResponse;
@@ -105,11 +106,23 @@ public class ProductServiceImpl
             String sortBy,
             String direction) {
 
-        Sort sort = direction.equalsIgnoreCase("desc")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
+        if (!ProductSortFields.ALLOWED_FIELDS.contains(sortBy)) {
+            throw new IllegalArgumentException(
+                    "Invalid sort field: " + sortBy
+            );
+        }
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Sort.Direction sortDirection =
+                Sort.Direction.fromString(direction);
+
+        Pageable pageable =
+                PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+//        Sort sort = direction.equalsIgnoreCase("desc")
+//                ? Sort.by(sortBy).descending()
+//                : Sort.by(sortBy).ascending();
+
+ //       Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Product> productPage = repository.findAll(pageable);
 
