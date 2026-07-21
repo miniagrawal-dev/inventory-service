@@ -16,4 +16,7 @@ public interface ProductService {
 
     ProductResponse updateProduct(Long id, UpdateProductRequest request);
 
+    PageResponse<ProductResponse> searchProducts(
+            String keyword, int page, int size, String sortBy, String direction);
+
 }

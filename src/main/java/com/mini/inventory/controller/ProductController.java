@@ -60,4 +60,16 @@ public class ProductController {
                 productService.updateProduct(id, request));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<PageResponse<ProductResponse>>
+    searchProducts(@RequestParam String keyword,
+
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10")  int size,
+                   @RequestParam(defaultValue = "id") String sortBy,
+                   @RequestParam(defaultValue = "asc") String direction){
+
+        return ResponseEntity.ok(
+                productService.searchProducts(keyword, page, size, sortBy, direction));
+    }
+
 }

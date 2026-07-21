@@ -142,4 +142,38 @@ public class ProductServiceImpl
 
         return mapper.toResponse(product);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<ProductResponse> searchProducts(String keyword, int page, int size,
+                                                        String sortBy, String direction) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable =
+                PageRequest.of(page, size, sort);
+
+        Page<Product> productPage =
+                repository
+                        .findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+                                keyword,
+                                keyword,
+                                pageable);
+
+        return PageResponse.<ProductResponse>builder()
+                .content(productPage
+                        .getContent()
+                        .stream()
+                        .map(mapper::toResponse)
+                        .toList())
+                .page(productPage.getNumber())
+                .size(productPage.getSize())
+                .totalElements(productPage.getTotalElements())
+                .totalPages(productPage.getTotalPages())
+                .first(productPage.isFirst())
+                .last(productPage.isLast())
+                .build();
+    }
 }

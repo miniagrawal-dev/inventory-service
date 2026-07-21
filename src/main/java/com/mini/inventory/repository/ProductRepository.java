@@ -1,6 +1,10 @@
 package com.mini.inventory.repository;
 
+import com.mini.inventory.dto.PageResponse;
+import com.mini.inventory.dto.ProductResponse;
 import com.mini.inventory.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository
@@ -8,4 +12,8 @@ public interface ProductRepository
 
     boolean existsBySku(String sku);
 
+    Page<Product> findByNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+            String name,
+            String category,
+            Pageable pageable);
 }
