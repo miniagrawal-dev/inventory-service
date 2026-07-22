@@ -7,6 +7,7 @@ import com.mini.inventory.dto.PageResponse;
 import com.mini.inventory.dto.ProductResponse;
 import com.mini.inventory.dto.UpdateProductRequest;
 import com.mini.inventory.entity.Product;
+import com.mini.inventory.event.ProductCreatedEvent;
 import com.mini.inventory.exception.DuplicateSkuException;
 import com.mini.inventory.exception.ProductNotFoundException;
 import com.mini.inventory.mapper.ProductMapper;
@@ -15,6 +16,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +36,8 @@ public class ProductServiceImpl
         implements ProductService {
 
     private final ProductRepository repository;
-
     private final ProductMapper mapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @CacheEvict(value = CacheNames.PRODUCT_LIST,  allEntries = true)
@@ -90,7 +92,10 @@ public class ProductServiceImpl
                 .build();
         */
 
-        return mapper.toResponse(saved);
+        ProductResponse response = mapper.toResponse(saved);
+        eventPublisher.publishEvent(
+                new ProductCreatedEvent(response));
+        return response;
 
     }
 
