@@ -550,32 +550,6 @@ Security --> Controller
 Exception --> Controller
 ```
 
-## Spring Boot Startup
-
-```mermaid
-flowchart TD
-
-Start[SpringApplication.run()]
-
-Start --> Context[Create ApplicationContext]
-
-Context --> Scan[Component Scan]
-
-Scan --> Beans[Create Beans]
-
-Beans --> AutoConfig[Auto Configuration]
-
-AutoConfig --> Security
-
-AutoConfig --> JPA
-
-AutoConfig --> Redis
-
-AutoConfig --> Controllers
-
-Controllers --> Ready[Application Ready]
-```
-
 ## Exception Handling
 
 ```mermaid
