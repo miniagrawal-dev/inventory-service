@@ -1,5 +1,7 @@
 package com.mini.inventory.config;
 
+import com.mini.inventory.security.CustomAccessDeniedHandler;
+import com.mini.inventory.security.CustomAuthenticationEntryPoint;
 import com.mini.inventory.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
@@ -44,7 +48,10 @@ public class SecurityConfig {
                         // Everything else requires authentication
                         .anyRequest()
                         .authenticated()
-                ) .addFilterBefore(
+                ) .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                ).addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
