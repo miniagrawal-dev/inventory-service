@@ -22,10 +22,13 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request) {
 
-        authenticationService.login(request);
+       String token =  authenticationService.login(request);
+
+//        return ResponseEntity.ok(
+//                new LoginResponse("Login Successful")
 
         return ResponseEntity.ok(
-                new LoginResponse("Login Successful")
+                new LoginResponse(token)
         );
     }
 

@@ -5,6 +5,7 @@ import com.mini.inventory.dto.PageResponse;
 import com.mini.inventory.dto.ProductResponse;
 import com.mini.inventory.dto.UpdateProductRequest;
 import com.mini.inventory.service.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,12 +26,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ProductResponse> createProduct(
-
-            @Valid
-            @RequestBody
-            CreateProductRequest request){
-
+            @Valid  @RequestBody CreateProductRequest request){
         ProductResponse response =
                 productService.createProduct(request);
 
@@ -41,6 +39,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ProductResponse> getProduct(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProduct(id));
     }
@@ -57,6 +56,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable Long id, @Valid @RequestBody UpdateProductRequest request){
 
@@ -77,6 +77,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
 

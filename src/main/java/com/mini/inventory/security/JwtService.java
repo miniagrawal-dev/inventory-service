@@ -24,6 +24,11 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
+    /*
+    JWT needs a cryptographic key for:
+          Signing the token during login.
+          Verifying the signature on every request.
+     */
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
