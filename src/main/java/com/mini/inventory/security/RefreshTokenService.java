@@ -64,4 +64,9 @@ public class RefreshTokenService {
 
         return refreshToken;
     }
+
+    @Transactional
+    public void logout(String token) {
+        refreshTokenRepository.deleteByToken(token);
+    }
 }

@@ -68,4 +68,10 @@ public class AuthenticationService {
                 .build();
     }
 
+    public void logout(RefreshTokenRequest request) {
+        refreshTokenService.logout(
+                request.getRefreshToken()
+        );
+    }
+
 }

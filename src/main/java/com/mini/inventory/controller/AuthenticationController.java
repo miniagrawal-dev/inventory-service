@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -40,6 +42,20 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(
                 authenticationService.refreshToken(request));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(
+            @RequestBody RefreshTokenRequest request) {
+
+        authenticationService.logout(request);
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "message",
+                        "Logged out successfully"
+                )
+        );
     }
 
 }
