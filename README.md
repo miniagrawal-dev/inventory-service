@@ -70,6 +70,7 @@ PING
 ```
 
 Check Circuit breaker details
-http://localhost:8080/actuator
+GET http://localhost:8080/actuator
 GET http://localhost:8080/actuator/circuitbreakerevents
 GET http://localhost:8080/actuator/circuitbreakers
+GET /actuator/metrics

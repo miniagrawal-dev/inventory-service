@@ -59,6 +59,19 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 2
         automatic-transition-from-open-to-half-open-enabled: true
 
+  ratelimiter:
+    instances:
+      pricingService:
+        limit-for-period: 5
+        limit-refresh-period: 30s
+        timeout-duration: 0
+
+  bulkhead:
+    instances:
+      pricingService:
+        max-concurrent-calls: 2
+        max-wait-duration: 0
+
 management:
   endpoints:
     web:
@@ -67,3 +80,4 @@ management:
   endpoint:
     health:
       show-details: always
+
