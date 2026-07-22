@@ -40,12 +40,19 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").permitAll()
 
+                        // Pricing API (for testing Resilience4j)
+                        .requestMatchers("/api/v1/pricing/**").permitAll()
+
                         // Swagger
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**")
                         .permitAll()
+
+                        // Actuator
+                        .requestMatchers("/actuator/**").permitAll()
+
 
                         // Everything else requires authentication
                         .anyRequest()
