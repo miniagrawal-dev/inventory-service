@@ -26,3 +26,7 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{traceId}] %logger{36} [%X{correlationId}] - %msg%n"
+
+jwt:
+  secret: ThisIsMyVeryLongSecretKeyForJwtAuthentication123456789
+  expiration: 3600000
