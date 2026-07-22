@@ -30,3 +30,6 @@ logging:
 jwt:
   secret: ThisIsMyVeryLongSecretKeyForJwtAuthentication123456789
   expiration: 3600000
+
+refresh-token:
+  expiration: 604800000

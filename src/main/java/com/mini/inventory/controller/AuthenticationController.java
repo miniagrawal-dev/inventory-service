@@ -2,6 +2,8 @@ package com.mini.inventory.controller;
 
 import com.mini.inventory.dto.auth.LoginRequest;
 import com.mini.inventory.dto.auth.LoginResponse;
+import com.mini.inventory.dto.auth.RefreshTokenRequest;
+import com.mini.inventory.dto.auth.TokenResponse;
 import com.mini.inventory.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +21,25 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
+    public ResponseEntity<TokenResponse> login(
             @Valid @RequestBody LoginRequest request) {
 
-       String token =  authenticationService.login(request);
+       TokenResponse token =  authenticationService.login(request);
 
 //        return ResponseEntity.ok(
 //                new LoginResponse("Login Successful")
 
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refreshToken(
+            @RequestBody RefreshTokenRequest request) {
+
+        System.out.println("Refresh endpoint called");
+
         return ResponseEntity.ok(
-                new LoginResponse(token)
-        );
+                authenticationService.refreshToken(request));
     }
 
 }

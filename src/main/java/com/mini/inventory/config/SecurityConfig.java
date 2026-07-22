@@ -32,6 +32,7 @@ public class SecurityConfig {
             throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/error").permitAll()
 
                         // Public authentication endpoints
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
