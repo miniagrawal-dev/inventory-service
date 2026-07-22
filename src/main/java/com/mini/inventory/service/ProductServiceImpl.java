@@ -1,5 +1,6 @@
 package com.mini.inventory.service;
 
+import com.mini.inventory.constants.CacheNames;
 import com.mini.inventory.constants.ProductSortFields;
 import com.mini.inventory.dto.CreateProductRequest;
 import com.mini.inventory.dto.PageResponse;
@@ -10,6 +11,10 @@ import com.mini.inventory.exception.DuplicateSkuException;
 import com.mini.inventory.exception.ProductNotFoundException;
 import com.mini.inventory.mapper.ProductMapper;
 import com.mini.inventory.repository.ProductRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +38,7 @@ public class ProductServiceImpl
     private final ProductMapper mapper;
 
     @Override
+    @CacheEvict(value = CacheNames.PRODUCT_LIST,  allEntries = true)
     public ProductResponse createProduct(CreateProductRequest request) {
         log.info("Creating product with SKU={}",
                 request.getSku());
@@ -90,6 +96,7 @@ public class ProductServiceImpl
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = CacheNames.PRODUCTS, key = "#id", unless = "#result == null")
     public ProductResponse getProduct(Long id) {
 
         Product product = repository.findById(id)
@@ -100,6 +107,7 @@ public class ProductServiceImpl
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = CacheNames.PRODUCT_LIST)
     public PageResponse<ProductResponse> getProducts(
             int page,
             int size,
@@ -144,6 +152,11 @@ public class ProductServiceImpl
 
     @Override
     @Transactional
+    @Caching(
+            put = { @CachePut( value = CacheNames.PRODUCTS, key = "#id") },
+            evict = { @CacheEvict( value = CacheNames.PRODUCT_LIST, allEntries = true)
+            }
+    )
     public ProductResponse updateProduct(Long id, UpdateProductRequest request) {
 
         Product product = repository.findById(id)
@@ -192,6 +205,11 @@ public class ProductServiceImpl
 
     @Override
     @Transactional
+    @Caching(
+            evict = { @CacheEvict( value = CacheNames.PRODUCTS, key = "#id"),
+                      @CacheEvict( value = CacheNames.PRODUCT_LIST, allEntries = true)
+            }
+    )
     public void deleteProduct(Long id) {
 
         Product product = repository.findById(id)

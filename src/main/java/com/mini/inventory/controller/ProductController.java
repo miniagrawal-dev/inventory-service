@@ -48,6 +48,8 @@ public class ProductController {
     }
 
     @GetMapping
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<PageResponse<ProductResponse>> getProducts(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size,
@@ -69,6 +71,8 @@ public class ProductController {
     }
 
     @GetMapping("/search")
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<PageResponse<ProductResponse>>
     searchProducts(@RequestParam String keyword,
 

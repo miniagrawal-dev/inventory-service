@@ -9,6 +9,7 @@ docker run --name postgres-db \
 
 validate postgres container is running
 docker ps
+docker rm <container-id>
 
 mvn clean compile
 mvn spring-boot:run
@@ -40,3 +41,31 @@ Verify database
 docker exec -it postgres-db psql -U postgres -d inventory_db
 
 select * from product;
+
+## Running Locally
+
+Start dependencies:
+
+```bash
+Redis
+docker compose up -d
+docker ps
+
+docker compose down
+
+//delete named volumes of database
+docker compose down -v
+
+mvn spring-boot:run
+
+verify redis
+docker exec -it inventory-redis redis-cli
+ KEYS *
+ TYPE products::1
+ GET products::1
+ 
+ docker stop redis
+ docker start redis
+PING
+```
+

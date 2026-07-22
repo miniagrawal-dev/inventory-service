@@ -1,12 +1,14 @@
 package com.mini.inventory.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Builder
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageResponse<T> {
     private List<T> content;
 

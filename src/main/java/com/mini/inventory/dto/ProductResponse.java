@@ -1,15 +1,17 @@
 package com.mini.inventory.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ProductResponse  {
 
     private Long id;
 
